@@ -13,9 +13,10 @@ class MaybePrimitive implements InferPipe
     public function apply(mixed $value, Property $property): Result
     {
         foreach ($property->getTypes() as $type) {
-            $casted = $this->castPrimitive($value, $type->name);
-            if ($casted)
+            $casted = $this->castPrimitive($value, $type->getName());
+            if ($casted) {
                 return new Result(true, $casted, true);
+            }
         }
         return new Result(false, $value, true);
     }

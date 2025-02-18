@@ -5,7 +5,6 @@ namespace Looqey\Speca\Parse;
 use Looqey\Speca\Core\Context\ClassContext;
 use Looqey\Speca\Data;
 
-
 class Context
 {
     public array $inputData;

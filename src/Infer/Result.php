@@ -8,7 +8,6 @@ class Result
         public bool $applied,
         public mixed $value,
         public bool $finite = false
-    )
-    {
+    ) {
     }
 }

@@ -9,14 +9,15 @@ class Parameter
     public function __construct(\ReflectionParameter $parameter, protected ?Property $property = null)
     {
         $this->name = $parameter->getName();
-
     }
 
-    public function getName(): string {
+    public function getName(): string
+    {
         return $this->name;
     }
 
-    public function getProperty(): ?Property {
+    public function getProperty(): ?Property
+    {
         return $this->property;
     }
 }

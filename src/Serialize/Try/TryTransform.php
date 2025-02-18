@@ -13,7 +13,7 @@ class TryTransform implements SerializeVariant
         $transformers = $property->getContractAttributes(Attr::class);
 
         foreach ($transformers as $transformer) {
-            $value = $transformer->getTransformer()->transform($value, $property);
+            $value = $transformer->getTransformer()->serialize($value, $property);
         }
         return new Result($property->getName(), $value, true, !!count($transformers));
     }

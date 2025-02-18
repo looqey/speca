@@ -2,7 +2,6 @@
 
 namespace Looqey\Speca\Parse;
 
-
 use Looqey\Speca\Parse\Steps\ParseStep;
 
 class Pipeline

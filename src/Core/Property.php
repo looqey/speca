@@ -9,10 +9,10 @@ use Looqey\Speca\Contracts\PropertyAttribute;
  */
 class Property
 {
-    public string $name;
-    public array $types = [];
-    public array $attributes = [];
-    public mixed $default;
+    private string $name;
+    private array $types = [];
+    private array $attributes = [];
+    private mixed $default;
 
     public function __construct(
         private \ReflectionProperty $property
@@ -27,24 +27,24 @@ class Property
     {
         $type = $this->property->getType();
         $this->types = $type instanceof \ReflectionUnionType
-            ? array_map(fn($t) => new PropertyType($t->getName(), $t->allowsNull()), $type->getTypes())
+            ? array_map(fn ($t) => new PropertyType($t->getName(), $t->allowsNull()), $type->getTypes())
             : ($type ? [new PropertyType($type->getName(), $type->allowsNull())] : []);
     }
 
     private function initializeAttributes(): void
     {
         $this->attributes = array_map(
-            fn(\ReflectionAttribute $attr) => $attr->newInstance(),
+            fn (\ReflectionAttribute $attr) => $attr->newInstance(),
             array_filter(
                 $this->property->getAttributes(),
-                fn(\ReflectionAttribute $attr) => is_subclass_of($attr->getName(), PropertyAttribute::class)
+                fn (\ReflectionAttribute $attr) => is_subclass_of($attr->getName(), PropertyAttribute::class)
             )
         );
     }
 
     public function isLazy(): bool
     {
-        return !!count(array_filter($this->types, fn(PropertyType $type) => $type->isLazy()));
+        return !!count(array_filter($this->types, fn (PropertyType $type) => $type->isLazy()));
     }
 
     /**
@@ -56,7 +56,7 @@ class Property
     {
         return array_filter(
             $this->attributes,
-            fn($attr) => $attr instanceof $contract
+            fn ($attr) => $attr instanceof $contract
         );
     }
 
@@ -71,5 +71,13 @@ class Property
     public function getTypes(): array
     {
         return $this->types;
+    }
+
+    public function getDefaultValue(): mixed
+    {
+        if (!isset($this->default)) {
+            return null;
+        }
+        return $this->default;
     }
 }

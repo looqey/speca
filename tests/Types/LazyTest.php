@@ -49,7 +49,26 @@ final class LazyTest extends TestCase
         $this->assertEquals("John Doe", $result["nestedData"]["name"]);
     }
 
+    public function testExcludeProperty() {
+        $parentClass = new class('it') extends Data {
+            public NestedClass $nestedData;
+            public function __construct(
+                public string $excludedDefault = 'default'
+            )
+            {
+            }
+        };
+
+        $obj = $parentClass::from(['nestedData' => ['name' => 'test']]);
+        $obj->exclude('nestedData.defaultProp');
+        $obj->exclude('excludedDefault');
+        $result = $obj->toArray();
+        $this->assertArrayNotHasKey('defaultProp', $result["nestedData"]);
+        $this->assertArrayNotHasKey('excludedDefault', $result);
+    }
+
 }
 class NestedClass extends Data {
     public Lazy|string $name;
+    public string $defaultProp = 'default';
 }

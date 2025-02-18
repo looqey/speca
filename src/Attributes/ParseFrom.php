@@ -9,12 +9,13 @@ use Looqey\Speca\Contracts\PropertyAttribute;
 class ParseFrom implements PropertyAttribute
 {
     protected array $fieldNames = [];
-    public function __construct(protected string $fieldName,  string ...$fieldNames)
+    public function __construct(protected string $fieldName, string ...$fieldNames)
     {
-         $this->fieldNames = $fieldNames;
+        $this->fieldNames = $fieldNames;
     }
 
-    public function getFieldNames(): array {
+    public function getFieldNames(): array
+    {
         return [$this->fieldName, ...$this->fieldNames];
     }
 }

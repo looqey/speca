@@ -46,7 +46,8 @@ class ObjectContext
         return false;
     }
 
-    public function isExcluded(string $propertyPath): bool {
+    public function isExcluded(string $propertyPath): bool
+    {
         foreach ($this->excludes as $exclude) {
             if ($exclude === $propertyPath || strpos($propertyPath, $exclude . '.') === 0) {
                 return true;

@@ -12,7 +12,7 @@ class TryData implements SerializeVariant
     {
         return new Result(
             $property->getName(),
-            $value instanceof Data ? $value->toArray() : $value
+            $value instanceof Data || is_object($value) && method_exists($value, 'toArray') ? $value->toArray() : $value
         );
     }
 }

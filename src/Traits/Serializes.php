@@ -45,7 +45,7 @@ trait Serializes
         $transformers = $property->getContractAttributes(SerializeBy::class);
 
         foreach ($transformers as $transformer) {
-            $value = $transformer->getTransformer()->transform($value, $property);
+            $value = $transformer->getTransformer()->serialize($value, $property);
         }
 
         return $value;

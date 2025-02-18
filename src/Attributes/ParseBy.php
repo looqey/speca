@@ -20,7 +20,8 @@ class ParseBy implements PropertyAttribute
     /**
      * @return PropertyParser
      */
-    public function getParser() {
+    public function getParser()
+    {
         return new $this->parser();
     }
 }

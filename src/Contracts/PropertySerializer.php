@@ -7,5 +7,5 @@ use Looqey\Speca\Core\Property;
 interface PropertySerializer
 {
 
-    public function transform(mixed $value, Property $property): mixed;
+    public function serialize(mixed $value, Property $property): mixed;
 }

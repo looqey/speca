@@ -19,6 +19,6 @@ class Inferer
             new MaybePrimitive(),
         );
 
-        return $pipeline->execute($value, $property) ?? $property->default;
+        return $pipeline->execute($value, $property) ?? $property->getDefaultValue();
     }
 }

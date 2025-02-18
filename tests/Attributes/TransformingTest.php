@@ -29,7 +29,7 @@ final class TransformingTest extends TestCase
 
 class NameToComplexValueSerializer implements PropertySerializer {
 
-    public function transform(mixed $value, Property $property): mixed
+    public function serialize(mixed $value, Property $property): mixed
     {
         $values = explode(' ', $value);
 

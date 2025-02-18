@@ -99,7 +99,7 @@ class ItemCustomSerializer implements PropertySerializer {
      * @param Property $property
      * @return mixed
      */
-    public function transform(mixed $value, Property $property): mixed
+    public function serialize(mixed $value, Property $property): mixed
     {
         $value["name"] = "rough ".$value["name"];
         return $value;

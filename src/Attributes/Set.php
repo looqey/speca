@@ -1,6 +1,7 @@
 <?php
 
 namespace Looqey\Speca\Attributes;
+
 use Attribute;
 use Looqey\Speca\Contracts\PropertyAttribute;
 use Looqey\Speca\Contracts\PropertyParser;
@@ -25,15 +26,18 @@ class Set implements PropertyAttribute
         }
     }
 
-    public function ofWhat(): string {
+    public function ofWhat(): string
+    {
         return $this->of;
     }
 
-    public function getParser(): ?PropertyParser {
+    public function getParser(): ?PropertyParser
+    {
         return $this->parser ? new $this->parser() : null;
     }
 
-    public function getSerializer(): ?PropertySerializer {
+    public function getSerializer(): ?PropertySerializer
+    {
         return $this->serializer ? new $this->serializer() : null;
     }
 

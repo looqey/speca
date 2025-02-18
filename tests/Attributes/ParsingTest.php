@@ -13,7 +13,7 @@ final class ParsingTest extends TestCase
 {
     public function testParseByAttribute(): void {
         $class = new class() extends Data {
-            #[ParseBy(ArrayToNameCaster::class)]
+            #[ParseBy(ArrayToNameParser::class)]
             public string $name;
         };
 
@@ -36,7 +36,6 @@ final class ParsingTest extends TestCase
         };
 
         $data = [
-            'name' => 'John',
             'username' => 'johndoe',
             'nickname' => 'johny',
         ];
@@ -51,9 +50,59 @@ final class ParsingTest extends TestCase
             $assert($name);
         }
     }
+
+    public function testParseByWillWorkOnConstructorArg(): void {
+        $class = new class('it') extends Data {
+            #[ParseBy(ArrayToNameParser::class)]
+            public string $name;
+            public function __construct(
+                string $name,
+            )
+            {
+                $this->name = "rough " . $name;
+            }
+        };
+        $data = [
+            'name' => 'John',
+            'surname' => 'Doe'
+        ];
+        $it = $class::from([
+            'name' => $data
+        ]);
+        $this->assertSame('rough John Doe', $it->name);
+    }
+
+    public function testComplexParsing() {
+        $class = new class("it") extends Data {
+            public function __construct(
+                #[ParseFrom('user_id')]
+                #[ParseBy(UserIdToUserNameCaster::class)]
+                public string $name,
+            )
+            {
+            }
+        };
+        $ks = array_keys(UserIdToUserNameCaster::$users);
+        foreach ($ks as $k) {
+            $it = $class::from(['user_id' => $k]);
+            $this->assertSame(UserIdToUserNameCaster::$users[$k], $it->name);
+        }
+    }
 }
 
-class ArrayToNameCaster implements PropertyParser {
+class UserIdToUserNameCaster implements PropertyParser {
+    public static array $users =  [
+        1 => 'John',
+        2 => 'Philipp',
+    ];
+    public function parse(mixed $value, Property $property): mixed
+    {
+        return self::$users[$value];
+    }
+
+}
+
+class ArrayToNameParser implements PropertyParser {
 
     public function parse(mixed $value, Property $property): mixed
     {

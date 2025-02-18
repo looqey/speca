@@ -1,6 +1,7 @@
 <?php
 
 namespace Looqey\Speca\Attributes;
+
 use Attribute;
 use InvalidArgumentException;
 use Looqey\Speca\Contracts\PropertyAttribute;
@@ -20,7 +21,8 @@ class SerializeBy implements PropertyAttribute
     /**
      * @return PropertySerializer
      */
-    public function getTransformer() {
+    public function getTransformer()
+    {
         return new $this->transformer();
     }
 

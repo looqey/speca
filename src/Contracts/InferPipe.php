@@ -2,7 +2,6 @@
 
 namespace Looqey\Speca\Contracts;
 
-
 use Looqey\Speca\Core\Property;
 use Looqey\Speca\Infer\Result;
 
