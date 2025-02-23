@@ -5,6 +5,7 @@ namespace Looqey\Speca\Serialize;
 use Looqey\Speca\Core\Context\ObjectContext;
 use Looqey\Speca\Data;
 use Looqey\Speca\Serialize\Try\TryData;
+use Looqey\Speca\Serialize\Try\TryMapToField;
 use Looqey\Speca\Serialize\Try\TrySet;
 use Looqey\Speca\Serialize\Try\TryLazy;
 use Looqey\Speca\Serialize\Try\TrySkip;
@@ -24,6 +25,7 @@ class Serializer
             new TryTransform(),
             new TryLazy($context),
             new TryData(),
+            new TryMapToField(),
             new TrySet()
         );
         return $pipeline->execute($data);

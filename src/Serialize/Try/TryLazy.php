@@ -3,8 +3,7 @@
 namespace Looqey\Speca\Serialize\Try;
 
 use Looqey\Speca\Core\Context\ObjectContext;
-use Looqey\Speca\Core\Property;
-use Looqey\Speca\Serialize\Result;
+use Looqey\Speca\Serialize\PropertyContext;
 use Looqey\Speca\Types\Lazy;
 
 class TryLazy implements SerializeVariant
@@ -16,17 +15,19 @@ class TryLazy implements SerializeVariant
         $this->oContext = $oContext;
     }
 
-    public function apply(mixed $value, Property $property): Result
+    public function apply(PropertyContext $context): PropertyContext
     {
-        $pName = $property->getName();
-        if ($property->isLazy()) {
-            if (!$this->oContext->isIncluded($pName)) {
-                return Result::skip();
+        $prop = $context->getProperty();
+        if ($prop->isLazy()) {
+            if (!$this->oContext->isIncluded($context->getKey())) {
+                $context->skip();
+                return $context;
             }
-            if ($value instanceof Lazy) {
-                $value = $value->resolve();
+            $val = $context->getValue();
+            if ($val instanceof Lazy) {
+                $context->setValue($val->resolve());
             }
         }
-        return new Result($pName, $value, true);
+        return $context;
     }
 }

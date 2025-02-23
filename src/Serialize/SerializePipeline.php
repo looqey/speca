@@ -5,7 +5,11 @@ namespace Looqey\Speca\Serialize;
 use Looqey\Speca\Core\Context\ObjectContext;
 use Looqey\Speca\Core\Pipeline;
 use Looqey\Speca\Data;
+use Looqey\Speca\Serialize\Try\SerializeVariant;
 
+/**
+ * @property array<SerializeVariant> $rules
+ */
 class SerializePipeline extends Pipeline
 {
     /**
@@ -31,37 +35,48 @@ class SerializePipeline extends Pipeline
 
         foreach ($properties as $property) {
             $key = $property->getName();
-            $propertyValue = $instance->$key;
-            if (is_object($propertyValue) && method_exists($propertyValue, 'toArray')) {
-                $nestedContext = $this->context->filterForNested($key);
-                $serializer = new Serializer();
-                $propertyValue = $serializer->serialize($propertyValue, $nestedContext);
-            }
-            if (is_iterable($propertyValue)) {
-                foreach ($propertyValue as $k => $v) {
-                    if (is_object($v) && method_exists($v, 'toArray')) {
-                        $nestedContext = $this->context->filterForNested($key);
-                        $serializer = new Serializer();
-                        $propertyValue[$k] = $serializer->serialize($v, $nestedContext);
-                    }
-                }
-            }
+            $context = new PropertyContext(
+                $key,
+                $instance->$key,
+                $property
+            );
+            $context = $this->tryComplexValue($context);
 
             foreach ($this->rules as $rule) {
-                $response = $rule->apply($propertyValue, $property);
-                if (!$response->included) {
+                $context = $rule->apply($context);
+                if ($context->isSkipped()) {
                     continue 2;
                 }
-                $propertyValue = $response->value;
-                $key = $response->Key;
-                if ($response->finite) {
+                if ($context->isDone()) {
                     break;
                 }
             }
 
-            $output[$key] = $propertyValue;
+            $output[$context->getKey()] = $context->getValue();
         }
 
         return $output;
+    }
+
+    private function tryComplexValue(PropertyContext $context): PropertyContext
+    {
+        $val = $context->getValue();
+        $key = $context->getKey();
+        if (is_object($val) && method_exists($val, 'toArray')) {
+            $nestedContext = $this->context->filterForNested($key);
+            $serializer = new Serializer();
+            $context->setValue($serializer->serialize($val, $nestedContext));
+        }
+        if (is_iterable($val)) {
+            foreach ($val as $k => $v) {
+                if (is_object($v) && method_exists($v, 'toArray')) {
+                    $nestedContext = $this->context->filterForNested($key);
+                    $serializer = new Serializer();
+                    $val[$k] = $serializer->serialize($v, $nestedContext);
+                }
+            }
+            $context->setValue($val);
+        }
+        return $context;
     }
 }

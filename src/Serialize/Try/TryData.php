@@ -2,17 +2,17 @@
 
 namespace Looqey\Speca\Serialize\Try;
 
-use Looqey\Speca\Core\Property;
 use Looqey\Speca\Data;
-use Looqey\Speca\Serialize\Result;
+use Looqey\Speca\Serialize\PropertyContext;
 
 class TryData implements SerializeVariant
 {
-    public function apply(mixed $value, Property $property): Result
+    public function apply(PropertyContext $context): PropertyContext
     {
-        return new Result(
-            $property->getName(),
-            $value instanceof Data || is_object($value) && method_exists($value, 'toArray') ? $value->toArray() : $value
-        );
+        $val = $context->getValue();
+        if ($val instanceof Data || is_object($val) && method_exists($val, 'toArray')) {
+            $context->setValue($val->toArray());
+        }
+        return $context;
     }
 }

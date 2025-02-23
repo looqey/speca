@@ -3,8 +3,7 @@
 namespace Looqey\Speca\Serialize\Try;
 
 use Looqey\Speca\Core\Context\ObjectContext;
-use Looqey\Speca\Core\Property;
-use Looqey\Speca\Serialize\Result;
+use Looqey\Speca\Serialize\PropertyContext;
 
 class TrySkip implements SerializeVariant
 {
@@ -15,12 +14,12 @@ class TrySkip implements SerializeVariant
         $this->oContext = $oContext;
     }
 
-    public function apply(mixed $value, Property $property): Result
+    public function apply(PropertyContext $context): PropertyContext
     {
-        $pName = $property->getName();
+        $pName = $context->getKey();
         if ($this->oContext->isExcluded($pName)) {
-            return Result::skip();
+            $context->skip();
         }
-        return new Result($pName, $value);
+        return $context;
     }
 }

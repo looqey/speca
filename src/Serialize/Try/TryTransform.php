@@ -3,18 +3,19 @@
 namespace Looqey\Speca\Serialize\Try;
 
 use Looqey\Speca\Attributes\SerializeBy as Attr;
-use Looqey\Speca\Core\Property;
-use Looqey\Speca\Serialize\Result;
+use Looqey\Speca\Serialize\PropertyContext;
 
 class TryTransform implements SerializeVariant
 {
-    public function apply(mixed $value, Property $property): Result
+    public function apply(PropertyContext $context): PropertyContext
     {
+        $property = $context->getProperty();
         $transformers = $property->getContractAttributes(Attr::class);
-
+        $value = $context->getValue();
         foreach ($transformers as $transformer) {
             $value = $transformer->getTransformer()->serialize($value, $property);
         }
-        return new Result($property->getName(), $value, true, !!count($transformers));
+        $context->setValue($value);
+        return $context;
     }
 }

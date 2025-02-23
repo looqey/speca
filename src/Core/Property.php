@@ -11,7 +11,7 @@ class Property
 {
     private string $name;
     private array $types = [];
-    private array $attributes = [];
+    public array $attributes = [];
     private mixed $default;
 
     public function __construct(

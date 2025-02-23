@@ -3,14 +3,15 @@
 namespace Looqey\Speca\Serialize\Try;
 
 use Looqey\Speca\Attributes\Set;
-use Looqey\Speca\Core\Property;
 use Looqey\Speca\Data;
-use Looqey\Speca\Serialize\Result;
+use Looqey\Speca\Serialize\PropertyContext;
 
 class TrySet implements SerializeVariant
 {
-    public function apply(mixed $value, Property $property): Result
+    public function apply(PropertyContext $context): PropertyContext
     {
+        $property = $context->getProperty();
+        $value = $context->getValue();
         $set = $property->getContractAttributes(Set::class)[0] ?? null;
         if ($set) {
             $pName = $property->getName();
@@ -29,9 +30,9 @@ class TrySet implements SerializeVariant
             foreach ($value as $k => $item) {
                 $value[$k] = $via($item);
             }
-            return new Result($pName, $value, true, true);
+            $context->setValue($value);
         }
 
-        return new Result($property->getName(), $value);
+        return $context;
     }
 }

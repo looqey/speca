@@ -4,11 +4,10 @@
 namespace Looqey\Speca\Serialize\Try;
 
 use Looqey\Speca\Contracts\Pipe;
-use Looqey\Speca\Core\Property;
-use Looqey\Speca\Serialize\Result;
+use Looqey\Speca\Serialize\PropertyContext;
 
 interface SerializeVariant extends Pipe
 {
-    public function apply(mixed $value, Property $property): Result;
+    public function apply(PropertyContext $context): PropertyContext;
 
 }
