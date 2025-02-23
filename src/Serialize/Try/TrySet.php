@@ -21,7 +21,9 @@ class TrySet implements SerializeVariant
             $cn = $set->ofWhat();
             $serializer = $set->getSerializer();
 
-            if (!is_subclass_of($cn, Data::class)
+            if (!$cn && !$serializer) return $context;
+
+            if ((!$cn || !is_subclass_of($cn, Data::class))
             && !$serializer) {
                 throw new \Error('Not implemented');
             }

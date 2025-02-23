@@ -10,11 +10,11 @@ class Set implements PropertyAttribute
 {
     /**
      * @template T
-     * @param string $of
+     * @param ?class-string $of
      * @param class-string<Transformer>|null $parser
      * @param class-string<Transformer>|null $serializer
      */
-    public function __construct(protected string $of, protected ?string $parser = null, protected ?string $serializer = null)
+    public function __construct(protected ?string $of = null, protected ?string $parser = null, protected ?string $serializer = null)
     {
         if ($this->parser && !class_implements($this->parser, Transformer::class)) {
             throw new \InvalidArgumentException("Parser must implement ". Transformer::class . " interface");
@@ -24,7 +24,7 @@ class Set implements PropertyAttribute
         }
     }
 
-    public function ofWhat(): string {
+    public function ofWhat(): ?string {
         return $this->of;
     }
 

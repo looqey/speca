@@ -22,7 +22,9 @@ class MaybeSet implements InferPipe
             }
             $className = $setOf->ofWhat();
             $parser = $setOf->getParser();
-            if (!is_subclass_of($className, Parseable::class)
+            if (!$className && !$parser) return new Result(false, $value);
+
+            if ((!$className || !is_subclass_of($className, Parseable::class))
                 && !$parser) {
                 throw new \Error("Could not instantiate class that is not data yet.");
             }
