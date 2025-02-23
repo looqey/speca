@@ -26,7 +26,7 @@ class TrySet implements SerializeVariant
                 throw new \Error('Not implemented');
             }
 
-            $via = fn ($v) => $serializer ? $serializer->serialize($v, $property) : $cn::from($v);
+            $via = fn ($v) => $serializer ? $serializer->transform($v, $property) : $cn::from($v);
             foreach ($value as $k => $item) {
                 $value[$k] = $via($item);
             }

@@ -1,11 +1,9 @@
 <?php
 
 namespace Looqey\Speca\Attributes;
-
 use Attribute;
 use Looqey\Speca\Contracts\PropertyAttribute;
-use Looqey\Speca\Contracts\PropertyParser;
-use Looqey\Speca\Contracts\PropertySerializer;
+use Looqey\Speca\Contracts\Transformer;
 
 #[Attribute(Attribute::TARGET_PROPERTY)]
 class Set implements PropertyAttribute
@@ -13,31 +11,28 @@ class Set implements PropertyAttribute
     /**
      * @template T
      * @param string $of
-     * @param class-string<PropertyParser>|null $parser
-     * @param class-string<PropertySerializer>|null $serializer
+     * @param class-string<Transformer>|null $parser
+     * @param class-string<Transformer>|null $serializer
      */
     public function __construct(protected string $of, protected ?string $parser = null, protected ?string $serializer = null)
     {
-        if ($this->parser && !class_implements($this->parser, PropertyParser::class)) {
-            throw new \InvalidArgumentException("Parser must implement ". PropertyParser::class . " interface");
+        if ($this->parser && !class_implements($this->parser, Transformer::class)) {
+            throw new \InvalidArgumentException("Parser must implement ". Transformer::class . " interface");
         }
-        if ($this->serializer && !class_implements($this->serializer, PropertySerializer::class)) {
-            throw new \InvalidArgumentException("Serializer must implement ". PropertySerializer::class . " interface");
+        if ($this->serializer && !class_implements($this->serializer, Transformer::class)) {
+            throw new \InvalidArgumentException("Serializer must implement ". Transformer::class . " interface");
         }
     }
 
-    public function ofWhat(): string
-    {
+    public function ofWhat(): string {
         return $this->of;
     }
 
-    public function getParser(): ?PropertyParser
-    {
+    public function getParser(): ?Transformer {
         return $this->parser ? new $this->parser() : null;
     }
 
-    public function getSerializer(): ?PropertySerializer
-    {
+    public function getSerializer(): ?Transformer {
         return $this->serializer ? new $this->serializer() : null;
     }
 

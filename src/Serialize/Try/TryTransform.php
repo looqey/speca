@@ -10,10 +10,10 @@ class TryTransform implements SerializeVariant
     public function apply(PropertyContext $context): PropertyContext
     {
         $property = $context->getProperty();
-        $transformers = $property->getContractAttributes(Attr::class);
+        $curries = $property->getContractAttributes(Attr::class);
         $value = $context->getValue();
-        foreach ($transformers as $transformer) {
-            $value = $transformer->getTransformer()->serialize($value, $property);
+        foreach ($curries as $transformCurry) {
+            $value = $transformCurry->getTransformer()->transform($value, $property);
         }
         $context->setValue($value);
         return $context;

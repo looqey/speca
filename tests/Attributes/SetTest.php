@@ -3,8 +3,7 @@
 namespace Looqey\Speca\Tests\Attributes;
 
 use Looqey\Speca\Attributes\Set;
-use Looqey\Speca\Contracts\PropertyParser;
-use Looqey\Speca\Contracts\PropertySerializer;
+use Looqey\Speca\Contracts\Transformer;
 use Looqey\Speca\Core\Property;
 use Looqey\Speca\Data;
 use PHPUnit\Framework\TestCase;
@@ -84,22 +83,22 @@ class Item extends Data {
     }
 }
 
-class ItemCustomParser implements PropertyParser {
+class ItemCustomParser implements Transformer {
 
-    public function parse(mixed $value, Property $property): mixed
+    public function transform(mixed $value, Property $property): mixed
     {
        $value["age"] -= 5;
        return Item::from($value);
     }
 }
 
-class ItemCustomSerializer implements PropertySerializer {
+class ItemCustomSerializer implements Transformer {
     /**
      * @param array<Item> $value
      * @param Property $property
      * @return mixed
      */
-    public function serialize(mixed $value, Property $property): mixed
+    public function transform(mixed $value, Property $property): mixed
     {
         $value["name"] = "rough ".$value["name"];
         return $value;

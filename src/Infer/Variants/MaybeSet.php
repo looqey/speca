@@ -28,7 +28,7 @@ class MaybeSet implements InferPipe
             }
             $converted = [];
 
-            $via = fn ($v) => $parser ? $parser->parse($v, $property) : $className::from($v);
+            $via = fn ($v) => $parser ? $parser->transform($v, $property) : $className::from($v);
 
             foreach ($value as $key => $item) {
                 $converted[$key] = $via($item);

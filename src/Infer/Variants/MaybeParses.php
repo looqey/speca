@@ -16,7 +16,7 @@ class MaybeParses implements InferPipe
         $applied = false;
         foreach ($casters as $caster) {
 
-            $value = $caster->getParser()->parse($value, $property);
+            $value = $caster->getParser()->transform($value, $property);
             $applied = true;
         }
 

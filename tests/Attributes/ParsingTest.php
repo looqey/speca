@@ -4,7 +4,7 @@ namespace Looqey\Speca\Tests\Attributes;
 
 use Looqey\Speca\Attributes\ParseBy;
 use Looqey\Speca\Attributes\ParseFrom;
-use Looqey\Speca\Contracts\PropertyParser;
+use Looqey\Speca\Contracts\Transformer;
 use Looqey\Speca\Core\Property;
 use Looqey\Speca\Data;
 use PHPUnit\Framework\TestCase;
@@ -90,21 +90,21 @@ final class ParsingTest extends TestCase
     }
 }
 
-class UserIdToUserNameCaster implements PropertyParser {
+class UserIdToUserNameCaster implements Transformer {
     public static array $users =  [
         1 => 'John',
         2 => 'Philipp',
     ];
-    public function parse(mixed $value, Property $property): mixed
+    public function transform(mixed $value, Property $property): mixed
     {
         return self::$users[$value];
     }
 
 }
 
-class ArrayToNameParser implements PropertyParser {
+class ArrayToNameParser implements Transformer {
 
-    public function parse(mixed $value, Property $property): mixed
+    public function transform(mixed $value, Property $property): mixed
     {
         return $value['name'] . ' ' . $value['surname'];
     }

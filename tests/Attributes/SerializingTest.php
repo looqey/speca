@@ -4,7 +4,7 @@ namespace Looqey\Speca\Tests\Attributes;
 
 use Looqey\Speca\Attributes\SerializeBy;
 use Looqey\Speca\Attributes\SerializeTo;
-use Looqey\Speca\Contracts\PropertySerializer;
+use Looqey\Speca\Contracts\Transformer;
 use Looqey\Speca\Core\Property;
 use Looqey\Speca\Data;
 use PHPUnit\Framework\TestCase;
@@ -36,10 +36,10 @@ class SerializingTest extends TestCase
     }
 }
 
-class NameToComplexValueSerializer implements PropertySerializer
+class NameToComplexValueSerializer implements Transformer
 {
 
-    public function serialize(mixed $value, Property $property): mixed
+    public function transform(mixed $value, Property $property): mixed
     {
         $values = explode(' ', $value);
 
