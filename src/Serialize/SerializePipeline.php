@@ -62,7 +62,7 @@ class SerializePipeline extends Pipeline
     {
         $val = $context->getValue();
         $key = $context->getKey();
-        if (is_object($val) && method_exists($val, 'toArray')) {
+        if (is_object($val) && is_subclass_of($val, Data::class)) {
             $nestedContext = $this->context->filterForNested($key);
             $serializer = new Serializer();
             $context->setValue($serializer->serialize($val, $nestedContext));
