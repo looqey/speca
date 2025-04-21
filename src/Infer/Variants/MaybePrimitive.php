@@ -40,10 +40,11 @@ class MaybePrimitive implements InferPipe
         if (!enum_exists($enumType)) {
             return null;
         }
+        if ($value instanceof $enumType) return $value;
         try {
             return $enumType::from($value);
-        } catch (ValueError) {
-            return null;
+        } catch (\Exception $e) {
+            throw new \Exception("Could not create enum $enumType from value $value");
         }
     }
 }

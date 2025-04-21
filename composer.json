@@ -1,6 +1,6 @@
 {
     "name": "looqey/speca",
-    "version": "1.1.2",
+    "version": "1.1.3",
     "description": "Describe your specs through expressive data classes",
     "type": "library",
     "license": "MIT",
